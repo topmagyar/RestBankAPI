@@ -11,21 +11,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 
 
-@Controller
-@RequestMapping("/")
+//@Controller
+//@RequestMapping("/")
 public class RestService {
-
-    @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
-    public String get() {
-        return "Called the get Rest Service";
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
+//
+//    @RequestMapping(method = RequestMethod.GET)
+//    @ResponseBody
+//    public String get() {
+//        return "Called the get Rest Service";
+//    }
+//
+//    @RequestMapping(method = RequestMethod.POST)
+//    @ResponseBody
 //    public String post(@RequestBody String s) {
-    public String post(@RequestHeader(value = "Authorization") String s) {
-        return "yoyo " + s;
-    }
+//    public String post(@RequestHeader(value = "Authorization") String s) {
+//        return "yoyo " + s;
+//    }
 }
 

@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "com.develop.bank")
-public class RestConfig extends WebMvcConfigurerAdapter {
+@ComponentScan(basePackages = "com.develop.bank.controllers")
+public class WebConfig extends WebMvcConfigurerAdapter {
 
 }
