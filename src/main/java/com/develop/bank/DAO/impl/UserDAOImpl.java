@@ -1,4 +1,4 @@
-package com.develop.bank.DAO;
+package com.develop.bank.DAO.impl;
 
 import com.develop.bank.DAO.UserDAO;
 import com.develop.bank.model.User;

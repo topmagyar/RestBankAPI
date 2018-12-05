@@ -30,6 +30,7 @@ public class UserController {
 
     @GetMapping("/bla")
     public String get() {
+        System.out.println("CONTROLLER");
         return "BLA";
     }
 }
