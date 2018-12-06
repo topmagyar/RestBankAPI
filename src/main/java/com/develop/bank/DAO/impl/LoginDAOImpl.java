@@ -1,6 +1,7 @@
 package com.develop.bank.DAO.impl;
 
 import com.develop.bank.DAO.LoginDAO;
+import com.develop.bank.model.User;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,9 @@ public class LoginDAOImpl implements LoginDAO {
     private SessionFactory sessionFactory;
 
     public long login(String username, String password) {
-        return 228;
+        User user = sessionFactory.getCurrentSession().byNaturalId(User.class)
+                .using("username",username)
+                .load();
+        return user.getId();
     }
 }

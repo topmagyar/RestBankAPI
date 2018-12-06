@@ -1,5 +1,7 @@
 package com.develop.bank.model;
 
+import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +18,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
+    @NaturalId
     private String username;
     private String password;
 

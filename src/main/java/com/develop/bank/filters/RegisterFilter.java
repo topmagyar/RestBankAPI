@@ -11,7 +11,7 @@ import java.io.IOException;
  * @author Yehor Bobyk <ybobuk@tibco.com>
  */
 
-public class LoginFilter implements Filter {
+public class RegisterFilter implements Filter {
 
     public void init(FilterConfig filterConfig) throws ServletException {
 
