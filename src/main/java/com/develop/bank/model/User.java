@@ -21,6 +21,8 @@ public class User {
     @NaturalId
     private String username;
     private String password;
+    @NaturalId
+    private String token;
 
     public Long getId() {
         return id;
@@ -54,5 +56,11 @@ public class User {
         this.username = username;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
 
+    public String getToken() {
+        return token;
+    }
 }

@@ -19,7 +19,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Transactional
     @Override
-    public long login(String username, String password) {
+    public String login(String username, String password) {
         return loginDAO.login(username, password);
     }
 }

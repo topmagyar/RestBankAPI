@@ -1,5 +1,7 @@
 package com.develop.bank.model;
 
+import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +18,7 @@ public class ValidToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NaturalId
     private String token;
 
     public void setId(long id) {

@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * @author Yehor Bobyk <ybobuk@tibco.com>
  */
@@ -21,9 +19,7 @@ public class LoginController {
     @PostMapping("/login")
     public String loginUser(@RequestHeader("username") String username,
                             @RequestHeader("password") String password) {
-
-        System.out.println("PASSWORD " + password);
-        long id = loginService.login(username, password);
-        return "User with username " + username + " has id " + id;
+        String token = loginService.login(username, password);
+        return "User with username " + username + " has been logged in with status " + token;
     }
 }

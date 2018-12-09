@@ -3,9 +3,16 @@ package com.develop.bank.services.impl;
 import com.develop.bank.DAO.UserDAO;
 import com.develop.bank.model.User;
 import com.develop.bank.services.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Yehor Bobyk <ybobuk@tibco.com>
@@ -21,6 +28,50 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public long save(User user) {
+        String token = "null";
+        try {
+            token = generateToken(user);
+        } catch (Exception e) {
+        }
+        user.setToken(token);
+
         return userDAO.save(user);
+    }
+
+    public List<User> getUsers(String token) {
+        User userObject = userDAO.getUser("token", token);
+        String user = null;
+        try {
+            user = checkToken(token);
+        } catch (Exception e) {
+
+        }
+        if (userObject.getUsername().equals(user)) return userDAO.getUsers();
+        return null;
+    }
+
+    private String checkToken(String jwt) throws Exception {
+        Jws<Claims> claims = Jwts.parser()
+                .setSigningKey("secret".getBytes("UTF-8"))
+                .parseClaimsJws(jwt);
+        String username = (String) claims.getBody().get("scope");
+        return username;
+    }
+
+    private String generateToken(User user) throws Exception {
+        String jwt = Jwts.builder()
+//                .setSubject("users/TzMUocMF4p")
+//                .setExpiration(new Date(1300819380))
+                .claim("name", user.getFirstName())
+                .claim("username", user.getUsername())
+                .claim("admin", false)
+                .signWith(
+                        SignatureAlgorithm.HS256,
+                        "secret".getBytes("UTF-8")
+                )
+                .compact();
+
+        System.out.println("TOKEN for " + user.getUsername() + " - " + jwt);
+        return jwt;
     }
 }

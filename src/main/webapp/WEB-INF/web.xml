@@ -48,6 +48,16 @@
         <url-pattern>/bank-api/login/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>RegisterFilter</filter-name>
+        <filter-class>com.develop.bank.filters.RegisterFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>RegisterFilter</filter-name>
+        <url-pattern>/bank-api/register*</url-pattern>
+    </filter-mapping>
+
     <servlet-mapping>
         <servlet-name>rest</servlet-name>
         <url-pattern>/bank-api/*</url-pattern>

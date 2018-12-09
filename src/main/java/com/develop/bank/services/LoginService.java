@@ -6,5 +6,5 @@ package com.develop.bank.services;
 
 
 public interface LoginService {
-    long login(String username, String password);
+    String login(String username, String password);
 }

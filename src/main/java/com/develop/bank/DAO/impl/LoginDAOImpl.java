@@ -16,10 +16,13 @@ public class LoginDAOImpl implements LoginDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public long login(String username, String password) {
+    public String login(String username, String password) {
         User user = sessionFactory.getCurrentSession().byNaturalId(User.class)
                 .using("username",username)
                 .load();
-        return user.getId();
+        if (user.getPassword().equals(password)) {
+            return "Horosho";
+        }
+        return "Ploha";
     }
 }
