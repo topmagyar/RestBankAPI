@@ -1,6 +1,7 @@
 package com.develop.bank.services.impl;
 
 import com.develop.bank.DAO.ConnectionDAO;
+import com.develop.bank.model.ConnectionInfo;
 import com.develop.bank.model.util.ConnectionModel;
 import com.develop.bank.services.ConnectionService;
 import com.develop.bank.util.KeyConnection;
@@ -37,7 +38,7 @@ public class ConnectionServiceImpl implements ConnectionService {
                 new BigInteger(privateServerKey)
         );
 
-        if (connectionDAO.getInfo(connection.getUsername()).getInfo() == null) {
+        if (connectionDAO.getConnectionInfo(connection.getUsername()) == null) {
             connectionDAO.save(connection.getUsername(), secretKey.toString());
         }
 
@@ -46,6 +47,6 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     @Override
     public String getSecretKey(String username) {
-        return connectionDAO.getInfo(username).getInfo();
+        return connectionDAO.getConnectionInfo(username).getInfo();
     }
 }

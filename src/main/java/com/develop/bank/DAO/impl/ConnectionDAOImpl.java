@@ -28,7 +28,7 @@ public class ConnectionDAOImpl implements ConnectionDAO {
     }
 
     @Override
-    public ConnectionInfo getInfo(String username) {
+    public ConnectionInfo getConnectionInfo(String username) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ConnectionInfo.class)
                 .add(Restrictions.eq("username", username));
         Object result = criteria.uniqueResult();
@@ -37,7 +37,7 @@ public class ConnectionDAOImpl implements ConnectionDAO {
 
     @Override
     public void remove(String username) {
-        ConnectionInfo connectionInfo = getInfo(username);
+        ConnectionInfo connectionInfo = getConnectionInfo(username);
         sessionFactory.getCurrentSession().delete(connectionInfo);
     }
 

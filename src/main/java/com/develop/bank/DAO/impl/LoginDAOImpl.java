@@ -2,6 +2,7 @@ package com.develop.bank.DAO.impl;
 
 import com.develop.bank.DAO.ConnectionDAO;
 import com.develop.bank.DAO.LoginDAO;
+import com.develop.bank.DAO.UserDAO;
 import com.develop.bank.model.User;
 import com.develop.bank.util.CryptTool;
 import org.hibernate.SessionFactory;
@@ -19,14 +20,15 @@ public class LoginDAOImpl implements LoginDAO {
     private SessionFactory sessionFactory;
 
     @Autowired
+    private UserDAO userDAO;
+
+    @Autowired
     private ConnectionDAO connectionDAO;
 
     public String login(String username, String password) {
-        User user = sessionFactory.getCurrentSession().byNaturalId(User.class)
-                .using("username",username)
-                .load();
+        User user = userDAO.getUser("username", username);
 
-        String secretKey = connectionDAO.getInfo(username).getInfo();
+        String secretKey = connectionDAO.getConnectionInfo(username).getInfo();
 
         if (user.getPassword().equals(new CryptTool().decryptMessageByKey(password, secretKey))) {
             return user.getToken();

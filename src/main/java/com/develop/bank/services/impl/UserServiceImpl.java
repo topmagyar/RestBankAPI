@@ -1,8 +1,10 @@
 package com.develop.bank.services.impl;
 
 import com.develop.bank.DAO.ConnectionDAO;
+import com.develop.bank.DAO.TokenDAO;
 import com.develop.bank.DAO.UserDAO;
 import com.develop.bank.model.User;
+import com.develop.bank.model.ValidToken;
 import com.develop.bank.services.UserService;
 import com.develop.bank.util.CryptTool;
 import com.develop.bank.util.PasswordCrypt;
@@ -29,6 +31,9 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     @Autowired
+    private TokenDAO tokenDAO;
+
+    @Autowired
     private ConnectionDAO connectionDAO;
 
     private PasswordCrypt passwordCrypt = new PasswordCrypt();
@@ -36,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public long save(User user) {
-        String secretKey = connectionDAO.getInfo(user.getUsername()).getInfo();
+        String secretKey = connectionDAO.getConnectionInfo(user.getUsername()).getInfo();
         String password = user.getPassword();
         String key = passwordCrypt.notZeroDeterm(user.getUsername());
         String originalPassword = new CryptTool().decryptMessageByKey(password, secretKey);
@@ -48,12 +53,19 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
         }
         user.setToken(token);
+        if (token != "null") {
+            tokenDAO.save(token);
+        }
 
         return userDAO.save(user);
     }
 
     public List<User> getUsers(String token) {
         User userObject = userDAO.getUser("token", token);
+        ValidToken validToken = tokenDAO.get(token);
+        if (validToken == null) {
+            return null;
+        }
         String user = null;
         try {
             user = checkToken(token);
