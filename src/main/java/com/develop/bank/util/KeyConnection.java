@@ -8,9 +8,6 @@ import java.math.BigInteger;
 
 public class KeyConnection {
 
-//    public BigInteger privateAliceKey = new BigInteger("31231232");
-//    public BigInteger privateBobKey = new BigInteger("83123213232");
-
     public BigInteger binpow(BigInteger a, BigInteger n, BigInteger mod) {
         if (n.compareTo(BigInteger.ZERO) == 0)
             return BigInteger.ONE;
@@ -42,22 +39,4 @@ public class KeyConnection {
         return K;
     }
 
-    public void main() {
-        BigInteger g = new BigInteger("23432432432423432132123123123213214324232");
-        BigInteger p = new BigInteger("1312314234243243243242342342343321312321323242232329");
-//        BigInteger publicClientKey = calculatePublicClientKey(privateAliceKey, g, p);
-//        BigInteger publicServerKey = calculatePublicServerKey(g, p, publicClientKey);
-//
-//
-//        BigInteger clientSecretKey = calculateSecretKeyForClient(g, p, publicClientKey, publicServerKey);
-//        BigInteger serverSecretKey = calculateSecretKeyForServer(g, p, publicClientKey);
-//
-//        System.out.println("Alice Secret Key = " + privateAliceKey);
-//        System.out.println("Bob Secret Key = " + privateBobKey);
-//        System.out.println("Secret Key = " + serverSecretKey);
-//
-//
-//        System.out.println(clientSecretKey.compareTo(serverSecretKey) == 0);
-//        System.out.println(binpow(new BigInteger("10000"), new BigInteger("10"), new BigInteger("123921321312312321321321321312731286392163712638712638712638131232131232131232763786123")));
-    }
 }

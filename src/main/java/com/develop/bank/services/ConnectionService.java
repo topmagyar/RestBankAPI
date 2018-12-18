@@ -10,4 +10,5 @@ import com.develop.bank.model.util.ConnectionModel;
 public interface ConnectionService {
 
     String setUpConnection(ConnectionModel connection);
+    String getSecretKey(String username);
 }

@@ -10,6 +10,7 @@ public class ConnectionModel {
     private String g;
     private String p;
     private String serverPublicKey;
+    private String username;
 
     public void setClientPublicKey(String clientPublicKey) {
         this.clientPublicKey = clientPublicKey;
@@ -41,5 +42,13 @@ public class ConnectionModel {
 
     public String getServerPublicKey() {
         return serverPublicKey;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

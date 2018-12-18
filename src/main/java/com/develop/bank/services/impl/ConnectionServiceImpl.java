@@ -1,8 +1,10 @@
 package com.develop.bank.services.impl;
 
+import com.develop.bank.DAO.ConnectionDAO;
 import com.develop.bank.model.util.ConnectionModel;
 import com.develop.bank.services.ConnectionService;
 import com.develop.bank.util.KeyConnection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,9 @@ import java.math.BigInteger;
 @Service
 @Transactional(readOnly = true)
 public class ConnectionServiceImpl implements ConnectionService {
+
+    @Autowired
+    private ConnectionDAO connectionDAO;
 
     @Override
     public String setUpConnection(ConnectionModel connection) {
@@ -32,6 +37,13 @@ public class ConnectionServiceImpl implements ConnectionService {
                 new BigInteger(privateServerKey)
         );
 
+        connectionDAO.save(connection.getUsername(), secretKey.toString());
+
         return publicServerKey.toString();
+    }
+
+    @Override
+    public String getSecretKey(String username) {
+        return connectionDAO.getInfo(username).getInfo();
     }
 }
