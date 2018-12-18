@@ -64,7 +64,6 @@ public class PasswordCrypt {
             coderMap.put(String.valueOf(q), counter);
             counter++;
         }
-        System.out.println(coderMap.size() + " " + counter);
         coderMap.put(" ", counter);
         counter++;
         coderMap.put("!", counter);
@@ -328,14 +327,14 @@ public class PasswordCrypt {
         String decryptedMessage = "";
         codeKey = updateCodeKey(codeKey);
         coderMatrix = findCoderMatrix(codeKey);
-        System.out.println("Coder matrix:");
-        qq(coderMatrix);
+//        System.out.println("Coder matrix:");
+//        qq(coderMatrix);
 
         List<List<Long>> matrixCryptMsg = convertToMatrix(cryptMessage, (int) Math.sqrt(codeKey.length()));
-        qq(matrixCryptMsg);
+//        qq(matrixCryptMsg);
 
         long determ = findMatrixDeterm(coderMatrix);
-        System.out.println("determ: " + determ);
+//        System.out.println("determ: " + determ);
         if (determ == 0) {
             System.out.println("ERROR");
         } else {
@@ -353,35 +352,35 @@ public class PasswordCrypt {
             }
 //            g = brut(determ, coderMap.size(), d);
 //            System.out.println("determ: " + determ);
-            System.out.println("d: " + d);
+//            System.out.println("d: " + d);
 //            long x = g.getX();
-            System.out.println("x: " + x);
+//            System.out.println("x: " + x);
 //            long y = g.getY();
-            System.out.println("y: " + y);
+//            System.out.println("y: " + y);
 
 
 //            long revertD = findRevertDetermValue(determ, x);
 //            x = 10;
             long revertD = (x % coderMap.size() + coderMap.size()) % coderMap.size();
-            System.out.println("revert d: " + revertD);
+//            System.out.println("revert d: " + revertD);
             List<List<Long>> revertCoderMatrix = revertMatrix(coderMatrix);
-            System.out.println("Revert matrix:");
-            qq(revertCoderMatrix);
+//            System.out.println("Revert matrix:");
+//            qq(revertCoderMatrix);
 
             revertCoderMatrix = modMatrix(revertCoderMatrix, coderMap.size());
-            System.out.println("Mode matrix:");
-            qq(revertCoderMatrix);
+//            System.out.println("Mode matrix:");
+//            qq(revertCoderMatrix);
             revertCoderMatrix = multiplyMatrix(revertCoderMatrix, revertD);
-            qq(revertCoderMatrix);
+//            qq(revertCoderMatrix);
             revertCoderMatrix = modMatrix(revertCoderMatrix, coderMap.size());
-            qq(revertCoderMatrix);
+//            qq(revertCoderMatrix);
             revertCoderMatrix = transportMatrix(revertCoderMatrix);
-            qq(revertCoderMatrix);
+//            qq(revertCoderMatrix);
             revertCoderMatrix = removeNegativeElements(revertCoderMatrix, coderMap.size());
-            qq(revertCoderMatrix);
+//            qq(revertCoderMatrix);
 
             List<List<Long>> matrixMsg = encryptMatrixMsg(matrixCryptMsg, revertCoderMatrix);
-            qq(matrixMsg);
+//            qq(matrixMsg);
             StringBuilder builder = new StringBuilder(decryptedMessage);
             for (List<Long> list : matrixMsg) {
                 for (Long q : list) {
@@ -390,31 +389,20 @@ public class PasswordCrypt {
             }
             decryptedMessage = builder.toString();
             decryptedMessage = decryptedMessage.trim();
-            System.out.println("|" + decryptedMessage + "|");
+//            System.out.println("|" + decryptedMessage + "|");
         }
 
         return decryptedMessage;
     }
 
-    public static void main(String[] args) {
-        String message = "!@#aSDASDASDASdsdsdasd";
-
-        String codeKey = "topmagsdasdsyar";
+    private static String encryptMessage(String message, String codeKey) {
         createCodeValues();
-        System.out.println(coderMap);
         codeKey = updateCodeKey(codeKey);
         coderMatrix = findCoderMatrix(codeKey);
-        System.out.println(findMatrixDeterm(coderMatrix));
-
-        System.out.println("Coder matrix:");
-        qq(coderMatrix);
 
         List<List<Long>> matrixMsg = convertToMatrix(message, (int) Math.sqrt(codeKey.length()));
-
         List<List<Long>> cryptedMatrixMsg = encryptMatrixMsg(matrixMsg, coderMatrix);
 
-        System.out.println("cryptedMatrixMsg:");
-        qq(matrixMsg);
         String cryptMessage = "";
         StringBuilder builder = new StringBuilder(cryptMessage);
         for (List<Long> list : cryptedMatrixMsg) {
@@ -423,49 +411,83 @@ public class PasswordCrypt {
             }
         }
         cryptMessage = builder.toString();
-        System.out.println("|" + cryptMessage + "|");
+        return cryptMessage;
+    }
+
+    public static void main(String[] args) {
+        String message = "06090512Be";
+        System.out.println("Original message " + message);
+
+        String codeKey = "topmagsdasdsadsadasdasdasdassaddasdsyar";
+
+//        createCodeValues();
+//        System.out.println(coderMap);
+//        codeKey = updateCodeKey(codeKey);
+//        coderMatrix = findCoderMatrix(codeKey);
+//        System.out.println(findMatrixDeterm(coderMatrix));
+//
+//        System.out.println("Coder matrix:");
+//        qq(coderMatrix);
+//
+//        List<List<Long>> matrixMsg = convertToMatrix(message, (int) Math.sqrt(codeKey.length()));
+//
+//        List<List<Long>> cryptedMatrixMsg = encryptMatrixMsg(matrixMsg, coderMatrix);
+//
+//        System.out.println("cryptedMatrixMsg:");
+//        qq(matrixMsg);
+//        String cryptMessage = "";
+//        StringBuilder builder = new StringBuilder(cryptMessage);
+//        for (List<Long> list : cryptedMatrixMsg) {
+//            for (Long q : list) {
+//                builder.append(getCharById(q));
+//            }
+//        }
+//        cryptMessage = builder.toString();
+        String encryptMessage = encryptMessage(message, codeKey);
+        System.out.println("Encrypt message |" + encryptMessage + "|");
 
 
-        List<List<Long>> test = new ArrayList();
-        List<Long> l = new ArrayList<>();
-        l.add((long)0);
-        l.add((long)12);
-        l.add((long)29);
-        test.add(l);
-        l = new ArrayList<>();
-        l.add((long)16);
-        l.add((long)9);
-        l.add((long)14);
-        test.add(l);
-        l = new ArrayList<>();
-        l.add((long)9);
-        l.add((long)8);
-        l.add((long)13);
-        test.add(l);
+//        List<List<Long>> test = new ArrayList();
+//        List<Long> l = new ArrayList<>();
+//        l.add((long)0);
+//        l.add((long)12);
+//        l.add((long)29);
+//        test.add(l);
+//        l = new ArrayList<>();
+//        l.add((long)16);
+//        l.add((long)9);
+//        l.add((long)14);
+//        test.add(l);
+//        l = new ArrayList<>();
+//        l.add((long)9);
+//        l.add((long)8);
+//        l.add((long)13);
+//        test.add(l);
 
 //        System.out.println(findMatrixDeterm(test));
-        List<List<Long>> m = revertMatrix(test);
-        m = modMatrix(m, 37);
-        m = multiplyMatrix(m, 33);
-        m = modMatrix(m, 37);
-        m = transportMatrix(m);
-        m = removeNegativeElements(m, 37);
+//        List<List<Long>> m = revertMatrix(test);
+//        m = modMatrix(m, 37);
+//        m = multiplyMatrix(m, 33);
+//        m = modMatrix(m, 37);
+//        m = transportMatrix(m);
+//        m = removeNegativeElements(m, 37);
+//
+//        List<List<Long>> ms = new ArrayList<>();
+//        List<Long> ll = new ArrayList<>();
+//        ll.add((long)0);
+//        ll.add((long)31);
+//        ll.add((long)14);
+//        ms.add(ll);
+//        ll = new ArrayList<>();
+//        ll.add((long)24);
+//        ll.add((long)22);
+//        ll.add((long)32);
+//        ms.add(ll);
+//
+//        List<List<Long>> cr = encryptMatrixMsg(ms, m);
 
-        List<List<Long>> ms = new ArrayList<>();
-        List<Long> ll = new ArrayList<>();
-        ll.add((long)0);
-        ll.add((long)31);
-        ll.add((long)14);
-        ms.add(ll);
-        ll = new ArrayList<>();
-        ll.add((long)24);
-        ll.add((long)22);
-        ll.add((long)32);
-        ms.add(ll);
-
-        List<List<Long>> cr = encryptMatrixMsg(ms, m);
-
-        decryptMessage(cryptMessage, codeKey);
+        String decryptMessage = decryptMessage(encryptMessage, codeKey);
+        System.out.println("Decrypt message: |" + decryptMessage + "|");
 
     }
 }
