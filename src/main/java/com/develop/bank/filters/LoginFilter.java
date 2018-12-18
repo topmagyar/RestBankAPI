@@ -29,11 +29,11 @@ public class LoginFilter implements Filter {
 
         HttpServletResponse httpRes = (HttpServletResponse)servletResponse;
 
-        try{
-            bla();
-        } catch (Exception e) {
-
-        }
+//        try{
+//            bla();
+//        } catch (Exception e) {
+//
+//        }
 
         filterChain.doFilter(httpReq, httpRes);
     }

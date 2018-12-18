@@ -34,4 +34,12 @@ public class ConnectionDAOImpl implements ConnectionDAO {
         Object result = criteria.uniqueResult();
         return (ConnectionInfo) result;
     }
+
+    @Override
+    public void remove(String username) {
+        ConnectionInfo connectionInfo = getInfo(username);
+        sessionFactory.getCurrentSession().delete(connectionInfo);
+    }
+
+
 }

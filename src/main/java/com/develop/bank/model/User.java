@@ -21,7 +21,7 @@ public class User {
     @NaturalId
     private String username;
     private String password;
-    @NaturalId
+//    @NaturalId
     private String token;
 
     public Long getId() {

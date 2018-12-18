@@ -15,7 +15,7 @@ import java.math.BigInteger;
  */
 
 @Service
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class ConnectionServiceImpl implements ConnectionService {
 
     @Autowired
@@ -37,7 +37,9 @@ public class ConnectionServiceImpl implements ConnectionService {
                 new BigInteger(privateServerKey)
         );
 
-        connectionDAO.save(connection.getUsername(), secretKey.toString());
+        if (connectionDAO.getInfo(connection.getUsername()).getInfo() == null) {
+            connectionDAO.save(connection.getUsername(), secretKey.toString());
+        }
 
         return publicServerKey.toString();
     }

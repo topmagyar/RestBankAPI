@@ -115,11 +115,4 @@ public class CryptTool {
         return decryptMessage.toString();
     }
 
-    public static void main(String[] args) {
-        CryptTool cryptTool = new CryptTool();
-        String encrypt = cryptTool.encryptMessageByKey("1232134","98757576577686");
-        System.out.println("encrypt : " + encrypt);
-        String decrypt = cryptTool.decryptMessageByKey(encrypt,"98757576577686");
-        System.out.println("decrypt : " + decrypt);
-    }
 }

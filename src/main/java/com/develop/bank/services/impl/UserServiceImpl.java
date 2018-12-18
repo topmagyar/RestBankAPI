@@ -1,8 +1,11 @@
 package com.develop.bank.services.impl;
 
+import com.develop.bank.DAO.ConnectionDAO;
 import com.develop.bank.DAO.UserDAO;
 import com.develop.bank.model.User;
 import com.develop.bank.services.UserService;
+import com.develop.bank.util.CryptTool;
+import com.develop.bank.util.PasswordCrypt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -25,9 +28,20 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDAO userDAO;
 
+    @Autowired
+    private ConnectionDAO connectionDAO;
+
+    private PasswordCrypt passwordCrypt = new PasswordCrypt();
+
     @Transactional
     @Override
     public long save(User user) {
+        String secretKey = connectionDAO.getInfo(user.getUsername()).getInfo();
+        String password = user.getPassword();
+        String key = passwordCrypt.notZeroDeterm(user.getUsername());
+        String originalPassword = new CryptTool().decryptMessageByKey(password, secretKey);
+        user.setPassword(originalPassword);
+        originalPassword = passwordCrypt.decryptMessage(originalPassword, key);
         String token = "null";
         try {
             token = generateToken(user);
