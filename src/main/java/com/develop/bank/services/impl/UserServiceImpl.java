@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
         Jws<Claims> claims = Jwts.parser()
                 .setSigningKey("secret".getBytes("UTF-8"))
                 .parseClaimsJws(jwt);
-        String username = (String) claims.getBody().get("scope");
+        String username = (String) claims.getBody().get("username");
         return username;
     }
 

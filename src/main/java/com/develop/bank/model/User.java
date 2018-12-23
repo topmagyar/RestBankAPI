@@ -1,5 +1,6 @@
 package com.develop.bank.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
     private String firstName;
     @NaturalId
