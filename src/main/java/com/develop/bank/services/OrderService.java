@@ -11,7 +11,7 @@ import java.util.List;
 public interface OrderService {
 
     Order createOrder(String token, Order order);
-    String removeOrder(String token, Order order);
+    String removeOrder(String token, String orderId);
     List<Order> getOrders(String token);
-    Order getOrder(String token, String cardNumber);
+    Order getOrder(String token, String orderId);
 }

@@ -33,6 +33,6 @@ public class LoginDAOImpl implements LoginDAO {
         if (user.getPassword().equals(new CryptTool().decryptMessageByKey(password, secretKey))) {
             return user.getToken();
         }
-        return user.getToken();
+        return "Error";
     }
 }

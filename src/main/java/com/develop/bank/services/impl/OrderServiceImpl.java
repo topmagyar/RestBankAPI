@@ -40,20 +40,29 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String removeOrder(String token, Order order) {
-        return null;
+    public String removeOrder(String token, String orderId) {
+        if (checkTokenValid(token)) {
+            Order order = orderDAO.getOrder("id",orderId);
+            orderDAO.removeOrder(order);
+            return "Success";
+        }
+        return "Error";
     }
 
     @Override
     public List<Order> getOrders(String token) {
+        if (checkTokenValid(token)) {
+            return orderDAO.getOrders();
+        }
         return null;
     }
 
     @Override
-    public Order getOrder(String token, String cardNumber) {
+    public Order getOrder(String token, String orderId) {
         if (checkTokenValid(token)) {
-            
+            return orderDAO.getOrder("id", orderId);
         }
+        return null;
     }
 
     boolean checkTokenValid(String token) {
