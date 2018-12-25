@@ -30,7 +30,7 @@ public class CryptTool {
         counter++;
         coderMap.put("!", counter);
         counter++;
-        coderMap.put("@", counter);
+        coderMap.put(".", counter);
         counter++;
         coderMap.put("#", counter);
         counter++;

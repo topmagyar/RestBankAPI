@@ -8,6 +8,14 @@ public class CardAmountType {
 
     private String amountType;
 
+    public CardAmountType() {
+
+    }
+
+    public CardAmountType(String amountType) {
+        setAmountType(amountType);
+    }
+
     public void setAmountType(String amountType) {
         this.amountType = amountType;
     }

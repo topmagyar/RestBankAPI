@@ -1,6 +1,8 @@
 package com.develop.bank.client;
 
+import com.develop.bank.model.Card;
 import com.develop.bank.model.User;
+import com.develop.bank.model.card.CardAmountType;
 import com.develop.bank.model.connection.ConnectionModel;
 import com.develop.bank.model.connection.ConnectionResponse;
 import com.develop.bank.util.CryptTool;
@@ -85,19 +87,34 @@ public class ClientRequests {
         System.out.println("body: " + response1.getBody().getId());
     }
 
-//    @Test
-//    public void loginUser() {
-//        String password = "123456";
-//        PasswordCrypt passwordCrypt = new PasswordCrypt();
-//        String key = passwordCrypt.notZeroDeterm("topmagyar");
-//        password = passwordCrypt.encryptMessage(password, key);
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("username", "topmagyar");
-//        headers.add("password", new CryptTool().encryptMessageByKey(password, "268203753"));
-//        HttpEntity<String> request = new HttpEntity<>(headers);
-//        ResponseEntity<String> response1 = rest.postForEntity("https://localhost:8443/bank-api/login", request, String.class);
-//        System.out.println("body: " + response1.getBody());
-//    }
+    @Test
+    public void loginUser() {
+        String password = "123456";
+        String username = "topmagyar";
+        PasswordCrypt passwordCrypt = new PasswordCrypt();
+        String key = passwordCrypt.notZeroDeterm(username);
+        password = passwordCrypt.encryptMessage(password, key);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("username", username);
+        headers.add("password", new CryptTool().encryptMessageByKey(password, "322728646353086"));
+        HttpEntity<String> request = new HttpEntity<>(headers);
+        ResponseEntity<String> response1 = rest.postForEntity("https://localhost:8443/bank-api/login", request, String.class);
+        System.out.println("body: " + response1.getBody());
+    }
+
+    @Test
+    public void addCard() {
+        String username = "topmagyar";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiWWVob3IiLCJ1c2VybmFtZSI6InRvcG1hZ3lhciIsImFkbWluIjpmYWxzZX0.dZZqeQY0CxgVEeJdyuKvtUkFWJy5lJgzIs7d5kUVN7M";
+        CardAmountType cardAmountType = new CardAmountType("USD");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("token", new CryptTool().encryptMessageByKey(token, "322728646353086"));
+        headers.add("username", username);
+        HttpEntity<CardAmountType> request = new HttpEntity<>(cardAmountType, headers);
+        ResponseEntity<Card> response = rest.postForEntity("https://localhost:8443/bank-api/cards/add", request, Card.class);
+        Card c = response.getBody();
+        System.out.println("Card number " + c.getCardNumber());
+    }
 
 //    @Test
 //    public void registerUser() {

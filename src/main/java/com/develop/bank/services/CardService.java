@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CardService {
 
-    Card addCard(String token, String amountType);
+    Card addCard(String token, String username, String amountType);
     List<Card> getCards(String token);
     Card getCard(String token, String number);
     String removeCard(String token, String number);

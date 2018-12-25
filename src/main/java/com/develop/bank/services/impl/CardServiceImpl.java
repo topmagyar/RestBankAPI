@@ -1,12 +1,16 @@
 package com.develop.bank.services.impl;
 
 import com.develop.bank.DAO.CardDAO;
+import com.develop.bank.DAO.ConnectionDAO;
 import com.develop.bank.DAO.TokenDAO;
 import com.develop.bank.DAO.UserDAO;
 import com.develop.bank.model.Card;
+import com.develop.bank.model.ConnectionInfo;
 import com.develop.bank.model.User;
 import com.develop.bank.model.ValidToken;
 import com.develop.bank.services.CardService;
+import com.develop.bank.util.CryptTool;
+import com.develop.bank.util.PasswordCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,22 +35,32 @@ public class CardServiceImpl implements CardService {
     @Autowired
     private TokenDAO tokenDAO;
 
+    @Autowired
+    private ConnectionDAO connectionDAO;
+
     @Override
-    public Card addCard(String token, String amountType) {
-        User user = getUserByToken(token);
-        if (checkTokenValid(token) && user != null) {
-            Card card = new Card();
-            card.setAmount(String.valueOf(0));
-            card.setAmountType(amountType);
-            card.setUserId(String.valueOf(user.getId()));
-            card.setCardNumber(generateRandomCardNumber());
-            String cardKey = "";
-            for (int i = 0; i < 3; i++){
-                cardKey += String.valueOf(new Random().nextInt(10));
+    public Card addCard(String token, String username, String amountType) {
+        ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(username);
+        if (connectionInfo != null) {
+            token = new CryptTool().decryptMessageByKey(token, connectionInfo.getInfo());
+            User user = getUserByToken(token);
+            if (checkTokenValid(token) && user != null) {
+                Card card = new Card();
+                card.setAmount(String.valueOf(0));
+                card.setAmountType(amountType);
+                card.setUserId(String.valueOf(user.getId()));
+                card.setCardNumber(generateRandomCardNumber());
+                String cardKey = "";
+                for (int i = 0; i < 3; i++) {
+                    cardKey += String.valueOf(new Random().nextInt(10));
+                }
+                PasswordCrypt passwordCrypt = new PasswordCrypt();
+                String key = passwordCrypt.notZeroDeterm(username);
+                String cryptedCardKey = new PasswordCrypt().encryptMessage(cardKey, key);
+                card.setCardKey(cryptedCardKey);
+                cardDAO.saveCard(card);
+                return card;
             }
-            card.setCardKey(cardKey);
-            cardDAO.saveCard(card);
-            return card;
         }
         return null;
     }
@@ -79,6 +93,11 @@ public class CardServiceImpl implements CardService {
     boolean checkTokenValid(String token) {
         ValidToken validToken = tokenDAO.get(token);
         return validToken != null;
+    }
+
+    User getUserByUsername(String username) {
+        User user = userDAO.getUser("username", username);
+        return user;
     }
 
     User getUserByToken(String token) {

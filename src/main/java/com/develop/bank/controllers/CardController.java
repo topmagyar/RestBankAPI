@@ -20,8 +20,9 @@ public class CardController {
 
     @PostMapping("/cards/add")
     @ResponseBody
-    public Card addCard(@RequestHeader("token") String token, @RequestBody CardAmountType amountType) {
-        Card card = cardService.addCard(token, amountType.getAmountType());
+    public Card addCard(@RequestHeader("token") String token, @RequestHeader("username") String username,
+                        @RequestBody CardAmountType amountType) {
+        Card card = cardService.addCard(token, username, amountType.getAmountType());
         return card;
     }
 
