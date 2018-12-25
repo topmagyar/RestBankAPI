@@ -7,6 +7,7 @@ import com.develop.bank.model.connection.ConnectionModel;
 import com.develop.bank.model.connection.ConnectionResponse;
 import com.develop.bank.model.order.DecreaseOrder;
 import com.develop.bank.model.order.IncreaseOrder;
+import com.develop.bank.model.order.TransferOrder;
 import com.develop.bank.util.CryptTool;
 import com.develop.bank.util.KeyConnection;
 import com.develop.bank.util.KeyGenerator;
@@ -176,6 +177,23 @@ public class ClientRequests {
 
         ResponseEntity<Card> response = rest.postForEntity("https://localhost:8443/bank-api/transfers/decrease", request, Card.class);
         System.out.println("Response: card amount: " + response.getBody().getAmount());
+    }
+
+    @Test
+    public void transferCardAmount() {
+        TransferOrder transferOrder = new TransferOrder();
+        transferOrder.setAmount((long) 100);
+        transferOrder.setCardFrom("7738879483671899");
+        transferOrder.setCardTo("7085553151801804");
+        String username = "topmagyar";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiWWVob3IiLCJ1c2VybmFtZSI6InRvcG1hZ3lhciIsImFkbWluIjpmYWxzZX0.dZZqeQY0CxgVEeJdyuKvtUkFWJy5lJgzIs7d5kUVN7M";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("token", new CryptTool().encryptMessageByKey(token, "322728646353086"));
+        headers.add("username", username);
+        HttpEntity<TransferOrder> request = new HttpEntity<>(transferOrder, headers);
+
+        ResponseEntity<TransferOrder> response = rest.postForEntity("https://localhost:8443/bank-api/transfers/add", request, TransferOrder.class);
+        System.out.println("Response: " + response.getBody().getAmount());
     }
 
 //    @Test

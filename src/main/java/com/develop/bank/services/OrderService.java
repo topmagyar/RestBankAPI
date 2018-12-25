@@ -13,10 +13,10 @@ import java.util.List;
 
 public interface OrderService {
 
-    TransferOrder createOrder(String token, TransferOrder order);
-    String removeOrder(String token, String orderId);
-    List<TransferOrder> getOrders(String token);
-    TransferOrder getOrder(String token, String orderId);
+    TransferOrder createOrder(String username, String token, TransferOrder order);
+    String removeOrder(String username, String token, String orderId);
+    List<TransferOrder> getOrders(String username, String token);
+    TransferOrder getOrder(String username, String token, String orderId);
     Card increaseOrder(String username, String token, IncreaseOrder increaseOrder);
     Card decreaseOrder(String username, String token, DecreaseOrder increaseOrder);
 }

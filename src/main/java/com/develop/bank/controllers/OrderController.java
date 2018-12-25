@@ -22,21 +22,23 @@ public class OrderController {
 
     @PostMapping("/transfers/add")
     @ResponseBody
-    public TransferOrder addOrder(@RequestHeader("token") String token, @RequestBody TransferOrder order) {
-        TransferOrder o = orderService.createOrder(token, order);
+    public TransferOrder addOrder(@RequestHeader("username") String username, @RequestHeader("token") String token,
+                                  @RequestBody TransferOrder order) {
+        TransferOrder o = orderService.createOrder(username, token, order);
         return o;
     }
 
     @GetMapping("/transfers/get")
     @ResponseBody
-    public List<TransferOrder> getOrders(@RequestHeader("token") String token) {
-        return orderService.getOrders(token);
+    public List<TransferOrder> getOrders(@RequestHeader("username") String username, @RequestHeader("token") String token) {
+        return orderService.getOrders(username, token);
     }
 
     @GetMapping("/transfers/get/{id}")
     @ResponseBody
-    public TransferOrder getOrder(@RequestHeader("token") String token, @PathVariable("id") String id) {
-        return orderService.getOrder(token, id);
+    public TransferOrder getOrder(@RequestHeader("username") String username, @RequestHeader("token") String token,
+                                  @PathVariable("id") String id) {
+        return orderService.getOrder(username, token, id);
     }
 
     @PostMapping("/transfers/increase")

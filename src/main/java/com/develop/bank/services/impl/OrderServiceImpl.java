@@ -40,36 +40,60 @@ public class OrderServiceImpl implements OrderService {
     private CardDAO cardDAO;
 
     @Override
-    public TransferOrder createOrder(String token, TransferOrder order) {
-        User user = getUserByToken(token);
-        if (checkTokenValid(token) && user != null) {
-            orderDAO.addOrder(order);
+    public TransferOrder createOrder(String username, String token, TransferOrder order) {
+        ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(username);
+        if (connectionInfo != null) {
+            token = new CryptTool().decryptMessageByKey(token, connectionInfo.getInfo());
+            User user = getUserByToken(token);
+            if (checkTokenValid(token) && user != null) {
+                orderDAO.addOrder(order);
+                Card cardFrom = cardDAO.getCard("cardNumber", order.getCardFrom());
+                Card cardTo = cardDAO.getCard("cardNumber", order.getCardTo());
+                if (cardFrom.getUserId().equals(user.getId())) {
+                    cardFrom.setAmount(cardFrom.getAmount() - order.getAmount());
+                    cardTo.setAmount(cardTo.getAmount() + order.getAmount());
+                    cardDAO.updateCard(cardFrom);
+                    cardDAO.updateCard(cardTo);
+                }
+            }
         }
         return order;
     }
 
     @Override
-    public String removeOrder(String token, String orderId) {
-        if (checkTokenValid(token)) {
-            TransferOrder order = orderDAO.getOrder("id",orderId);
-            orderDAO.removeOrder(order);
-            return "Success";
+    public String removeOrder(String username, String token, String orderId) {
+        ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(username);
+        if (connectionInfo != null) {
+            token = new CryptTool().decryptMessageByKey(token, connectionInfo.getInfo());
+            if (checkTokenValid(token)) {
+                TransferOrder order = orderDAO.getOrder("id", orderId);
+                orderDAO.removeOrder(order);
+                return "Success";
+            }
         }
         return "Error";
     }
 
     @Override
-    public List<TransferOrder> getOrders(String token) {
-        if (checkTokenValid(token)) {
-            return orderDAO.getOrders();
+    public List<TransferOrder> getOrders(String username, String token) {
+        ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(username);
+        if (connectionInfo != null) {
+            token = new CryptTool().decryptMessageByKey(token, connectionInfo.getInfo());
+            if (checkTokenValid(token)) {
+                return orderDAO.getOrders();
+            }
         }
         return null;
     }
 
     @Override
-    public TransferOrder getOrder(String token, String orderId) {
-        if (checkTokenValid(token)) {
-            return orderDAO.getOrder("id", orderId);
+    public TransferOrder getOrder(String username, String token, String orderId) {
+        ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(username);
+        if (connectionInfo != null) {
+            token = new CryptTool().decryptMessageByKey(token, connectionInfo.getInfo());
+            if (checkTokenValid(token)) {
+                return orderDAO.getOrder("id", orderId);
+            }
         }
         return null;
     }
