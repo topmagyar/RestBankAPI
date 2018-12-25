@@ -336,6 +336,9 @@ public class PasswordCrypt {
     }
 
     public String decryptMessage(String cryptMessage, String codeKey) {
+        int id = cryptMessage.lastIndexOf("#");
+        int len = Integer.valueOf(cryptMessage.substring(id + 1));
+        cryptMessage = cryptMessage.substring(0, id);
         String decryptedMessage = "";
         codeKey = updateCodeKey(codeKey);
         coderMatrix = findCoderMatrix(codeKey);
@@ -367,10 +370,14 @@ public class PasswordCrypt {
 
             List<List<Long>> matrixMsg = encryptMatrixMsg(matrixCryptMsg, revertCoderMatrix);
             StringBuilder builder = new StringBuilder(decryptedMessage);
+            int l = 0;
             for (List<Long> list : matrixMsg) {
                 for (Long q : list) {
                     builder.append(getCharById(q));
+                    l++;
+                    if (l == len) break;
                 }
+                if (l == len) break;
             }
             decryptedMessage = builder.toString();
             decryptedMessage = decryptedMessage.trim();
@@ -395,7 +402,7 @@ public class PasswordCrypt {
             }
         }
         cryptMessage = builder.toString();
-        return cryptMessage;
+        return cryptMessage+"#"+message.length();
     }
 
 }

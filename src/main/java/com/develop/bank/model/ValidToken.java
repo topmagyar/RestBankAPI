@@ -11,7 +11,7 @@ import javax.persistence.Id;
  * @author Yehor Bobyk <ybobuk@tibco.com>
  */
 
-@Entity(name = "ValidTokens")
+@Entity(name = "validTokens")
 public class ValidToken {
 
     @Id

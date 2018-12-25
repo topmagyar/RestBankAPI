@@ -11,4 +11,5 @@ public interface ConnectionDAO {
     void save(String username, String secretKey);
     ConnectionInfo getConnectionInfo(String username);
     void remove(String username);
+    ConnectionInfo update(ConnectionInfo connectionInfo);
 }

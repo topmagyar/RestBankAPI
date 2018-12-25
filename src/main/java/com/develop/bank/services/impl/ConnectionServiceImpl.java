@@ -1,9 +1,11 @@
 package com.develop.bank.services.impl;
 
 import com.develop.bank.DAO.ConnectionDAO;
+import com.develop.bank.model.ConnectionInfo;
 import com.develop.bank.model.connection.ConnectionModel;
 import com.develop.bank.services.ConnectionService;
 import com.develop.bank.util.KeyConnection;
+import com.develop.bank.util.KeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +25,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     @Override
     public String setUpConnection(ConnectionModel connection) {
-        String privateServerKey = "31";
+        String privateServerKey = new KeyGenerator().generateKey(10);
         KeyConnection keyConnection = new KeyConnection();
         BigInteger publicServerKey = keyConnection.calculatePublicServerKey(
                 new BigInteger(connection.getG()),
@@ -37,7 +39,11 @@ public class ConnectionServiceImpl implements ConnectionService {
                 new BigInteger(privateServerKey)
         );
 
-        if (connectionDAO.getConnectionInfo(connection.getUsername()) == null) {
+        ConnectionInfo cnctInf = connectionDAO.getConnectionInfo(connection.getUsername());
+        if (cnctInf != null) {
+            cnctInf.setInfo(secretKey.toString());
+            connectionDAO.update(cnctInf);
+        } else {
             connectionDAO.save(connection.getUsername(), secretKey.toString());
         }
 

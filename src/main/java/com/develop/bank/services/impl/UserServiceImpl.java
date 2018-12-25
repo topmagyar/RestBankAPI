@@ -3,6 +3,7 @@ package com.develop.bank.services.impl;
 import com.develop.bank.DAO.ConnectionDAO;
 import com.develop.bank.DAO.TokenDAO;
 import com.develop.bank.DAO.UserDAO;
+import com.develop.bank.model.ConnectionInfo;
 import com.develop.bank.model.User;
 import com.develop.bank.model.ValidToken;
 import com.develop.bank.services.UserService;
@@ -41,9 +42,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User save(User user) {
-        String secretKey = connectionDAO.getConnectionInfo(user.getUsername()).getInfo();
-        String password = user.getPassword() + " ";
-        String key = passwordCrypt.notZeroDeterm("passwordCodeKey");
+        ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(user.getUsername());
+        if (connectionInfo == null) {
+            return null;
+        }
+        String secretKey = connectionInfo.getInfo();
+        String password = user.getPassword();
+        String key = passwordCrypt.notZeroDeterm(user.getUsername());
         String originalPassword = new CryptTool().decryptMessageByKey(password, secretKey);
         user.setPassword(originalPassword);
         originalPassword = passwordCrypt.decryptMessage(originalPassword, key);
