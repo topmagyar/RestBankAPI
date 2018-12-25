@@ -1,10 +1,12 @@
 package com.develop.bank.controllers;
 
-import com.develop.bank.model.util.ConnectionModel;
+import com.develop.bank.model.connection.ConnectionModel;
+import com.develop.bank.model.connection.ConnectionResponse;
 import com.develop.bank.services.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -18,7 +20,10 @@ public class ConnectionController {
     ConnectionService connectionService;
 
     @PostMapping("/setUpConnection")
-    public String setUpConnection(@RequestBody ConnectionModel connectionModel) {
-        return connectionService.setUpConnection(connectionModel);
+    @ResponseBody
+    public ConnectionResponse setUpConnection(@RequestBody ConnectionModel connectionModel) {
+        ConnectionResponse connectionResponse = new ConnectionResponse();
+        connectionResponse.setPublicServerKey(connectionService.setUpConnection(connectionModel));
+        return connectionResponse;
     }
 }

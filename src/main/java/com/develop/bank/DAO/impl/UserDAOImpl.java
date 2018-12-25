@@ -23,9 +23,9 @@ public class UserDAOImpl implements UserDAO {
     private SessionFactory sessionFactory;
 
     @Override
-    public long save(User user) {
+    public User save(User user) {
         sessionFactory.getCurrentSession().save(user);
-        return user.getId();
+        return user;
     }
 
     public List<User> getUsers() {

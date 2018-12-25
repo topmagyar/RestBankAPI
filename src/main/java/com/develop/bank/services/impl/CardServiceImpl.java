@@ -40,7 +40,11 @@ public class CardServiceImpl implements CardService {
             card.setAmountType(amountType);
             card.setUserId(String.valueOf(user.getId()));
             card.setCardNumber(generateRandomCardNumber());
-            card.setCardKey("228");
+            String cardKey = "";
+            for (int i = 0; i < 3; i++){
+                cardKey += String.valueOf(new Random().nextInt(10));
+            }
+            card.setCardKey(cardKey);
             cardDAO.saveCard(card);
             return card;
         }

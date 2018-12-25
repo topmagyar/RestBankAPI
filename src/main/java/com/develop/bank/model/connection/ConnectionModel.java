@@ -1,4 +1,4 @@
-package com.develop.bank.model.util;
+package com.develop.bank.model.connection;
 
 /**
  * @author Yehor Bobyk <ybobuk@tibco.com>

@@ -1,11 +1,11 @@
 package com.develop.bank.client;
 
 import com.develop.bank.model.User;
-import com.develop.bank.model.util.ConnectionModel;
+import com.develop.bank.model.connection.ConnectionModel;
+import com.develop.bank.model.connection.ConnectionResponse;
 import com.develop.bank.util.CryptTool;
 import com.develop.bank.util.KeyConnection;
 import com.develop.bank.util.PasswordCrypt;
-import org.codehaus.jackson.node.BigIntegerNode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class ClientRequests {
     @Autowired
     private RestOperations rest;
 
-    private String secretKey = "";
+    private String secretKey = "61953";
 
     @Test
     public void testRestRequest() throws Exception {
@@ -37,36 +37,36 @@ public class ClientRequests {
         System.out.println("response = " + response);
         System.out.println("response.getBody() = " + response.getBody());
     }
-
-    @Test
-    public void setUpConnectionWithServer() throws Exception {
-        KeyConnection keyConnection = new KeyConnection();
-        String privateClientKey = "12";
-        String g = "12";
-        String p = "1000000007";
-        BigInteger publicClientKey = keyConnection.calculatePublicClientKey(
-                new BigInteger(privateClientKey),
-                new BigInteger(g),
-                new BigInteger(p)
-        );
-        ConnectionModel connectionModel = new ConnectionModel();
-        connectionModel.setG(g);
-        connectionModel.setP(p);
-        connectionModel.setUsername("topmagyar");
-        connectionModel.setClientPublicKey(publicClientKey.toString());
-        ResponseEntity<String> response = rest.postForEntity("https://localhost:8443/bank-api/setUpConnection", connectionModel, String.class);
+//
+//    @Test
+//    public void setUpConnectionWithServer() throws Exception {
+//        KeyConnection keyConnection = new KeyConnection();
+//        String privateClientKey = "12345";
+//        String g = "321";
+//        String p = "123456";
+//        BigInteger publicClientKey = keyConnection.calculatePublicClientKey(
+//                new BigInteger(privateClientKey),
+//                new BigInteger(g),
+//                new BigInteger(p)
+//        );
+//        ConnectionModel connectionModel = new ConnectionModel();
+//        connectionModel.setG(g);
+//        connectionModel.setP(p);
+//        connectionModel.setUsername("topmagyar");
+//        connectionModel.setClientPublicKey(publicClientKey.toString());
+//        ResponseEntity<String> response = rest.postForEntity("https://localhost:8443/bank-api/setUpConnection", connectionModel, String.class);
 //        System.out.println("response.getBody() = " + response.getBody());
-
-
-        String publicServerKey = response.getBody();
-        BigInteger secretKey = keyConnection.calculateSecretKeyForClient(
-                new BigInteger(connectionModel.getG()),
-                new BigInteger(connectionModel.getP()),
-                new BigInteger(privateClientKey),
-                new BigInteger(publicServerKey)
-        );
-        this.secretKey = secretKey.toString();
-    }
+//
+//
+//        String publicServerKey = response.getBody();
+//        BigInteger secretKey = keyConnection.calculateSecretKeyForClient(
+//                new BigInteger(connectionModel.getG()),
+//                new BigInteger(connectionModel.getP()),
+//                new BigInteger(privateClientKey),
+//                new BigInteger(publicServerKey)
+//        );
+//        this.secretKey = secretKey.toString();
+//    }
 
     @Test
     public void loginUser() {
@@ -82,20 +82,68 @@ public class ClientRequests {
         System.out.println("body: " + response1.getBody());
     }
 
+//    @Test
+//    public void registerUser() {
+//        String password = "123456";
+//        PasswordCrypt passwordCrypt = new PasswordCrypt();
+//        String key = passwordCrypt.notZeroDeterm("topmagyar");
+//        password = passwordCrypt.encryptMessage(password, key);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("password", new CryptTool().encryptMessageByKey(password, "268203753"));
+//        User user = new User();
+//        user.setUsername("topmagyar");
+//        user.setFirstName("Yehor");
+//        HttpEntity<User> request = new HttpEntity<>(user, headers);
+//        ResponseEntity<String> response1 = rest.postForEntity("https://localhost:8443/bank-api/register", request, String.class);
+//        System.out.println("body: " + response1.getBody());
+//    }
+
     @Test
     public void registerUser() {
-        String password = "123456";
+        String password = "abcabc";
         PasswordCrypt passwordCrypt = new PasswordCrypt();
-        String key = passwordCrypt.notZeroDeterm("topmagyar");
+        String key = passwordCrypt.notZeroDeterm("passwordCodeKey");
         password = passwordCrypt.encryptMessage(password, key);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("password", new CryptTool().encryptMessageByKey(password, "268203753"));
+        CryptTool cryptTool = new CryptTool();
+        String ecnryptedPassword = cryptTool.encryptMessageByKey(password, secretKey);
+        headers.add("password", new CryptTool().encryptMessageByKey(password, secretKey));
         User user = new User();
         user.setUsername("topmagyar");
         user.setFirstName("Yehor");
         HttpEntity<User> request = new HttpEntity<>(user, headers);
         ResponseEntity<String> response1 = rest.postForEntity("https://localhost:8443/bank-api/register", request, String.class);
         System.out.println("body: " + response1.getBody());
+    }
+
+
+    @Test
+    public void setUpConnectionWithServer() throws Exception {
+        KeyConnection keyConnection = new KeyConnection();
+        String privateClientKey = "12345";
+        String g = "321";
+        String p = "123456";
+        BigInteger publicClientKey = keyConnection.calculatePublicClientKey(
+                new BigInteger(privateClientKey),
+                new BigInteger(g),
+                new BigInteger(p)
+        );
+        ConnectionModel connectionModel = new ConnectionModel();
+        connectionModel.setG(g);
+        connectionModel.setP(p);
+        connectionModel.setUsername("user1");
+        connectionModel.setClientPublicKey(publicClientKey.toString());
+        ResponseEntity<ConnectionResponse> response = rest.postForEntity("https://localhost:8443/bank-api/setUpConnection", connectionModel, ConnectionResponse.class);
+
+        String publicServerKey = response.getBody().getPublicServerKey();
+        BigInteger secretKey = keyConnection.calculateSecretKeyForClient(
+                new BigInteger(connectionModel.getG()),
+                new BigInteger(connectionModel.getP()),
+                new BigInteger(privateClientKey),
+                new BigInteger(publicServerKey)
+        );
+        this.secretKey = secretKey.toString();
+        int q = 12321;
     }
 
 }

@@ -40,10 +40,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public long save(User user) {
+    public User save(User user) {
         String secretKey = connectionDAO.getConnectionInfo(user.getUsername()).getInfo();
-        String password = user.getPassword();
-        String key = passwordCrypt.notZeroDeterm(user.getUsername());
+        String password = user.getPassword() + " ";
+        String key = passwordCrypt.notZeroDeterm("passwordCodeKey");
         String originalPassword = new CryptTool().decryptMessageByKey(password, secretKey);
         user.setPassword(originalPassword);
         originalPassword = passwordCrypt.decryptMessage(originalPassword, key);

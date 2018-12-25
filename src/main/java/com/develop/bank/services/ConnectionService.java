@@ -1,6 +1,6 @@
 package com.develop.bank.services;
 
-import com.develop.bank.model.util.ConnectionModel;
+import com.develop.bank.model.connection.ConnectionModel;
 
 /**
  * @author Yehor Bobyk <ybobuk@tibco.com>

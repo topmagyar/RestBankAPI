@@ -1,6 +1,7 @@
 package com.develop.bank.controllers;
 
 import com.develop.bank.model.Card;
+import com.develop.bank.model.card.CardAmountType;
 import com.develop.bank.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,8 @@ public class CardController {
 
     @PostMapping("/cards/add")
     @ResponseBody
-    public Card addCard(@RequestHeader("token") String token, @RequestBody String amountType) {
-        Card card = cardService.addCard(token, amountType);
+    public Card addCard(@RequestHeader("token") String token, @RequestBody CardAmountType amountType) {
+        Card card = cardService.addCard(token, amountType.getAmountType());
         return card;
     }
 

@@ -20,13 +20,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/user")
-    public ResponseEntity<?> saveUser(@RequestBody User user) {
-        long id = userService.save(user);
-
-        return ResponseEntity.ok().body("User has been saved with id: " + id);
-    }
-
+//    @PostMapping("/user")
+//    public ResponseEntity<?> saveUser(@RequestBody User user) {
+//        User user = userService.save(user);
+//
+//        return ResponseEntity.ok().body("User has been saved with id: " + id);
+//    }
+//
     @GetMapping("/users")
     @ResponseBody
     public List<User> getUsers(@RequestHeader("token") String token) {

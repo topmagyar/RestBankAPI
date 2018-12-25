@@ -1,8 +1,7 @@
 package com.develop.bank.services.impl;
 
 import com.develop.bank.DAO.ConnectionDAO;
-import com.develop.bank.model.ConnectionInfo;
-import com.develop.bank.model.util.ConnectionModel;
+import com.develop.bank.model.connection.ConnectionModel;
 import com.develop.bank.services.ConnectionService;
 import com.develop.bank.util.KeyConnection;
 import org.springframework.beans.factory.annotation.Autowired;

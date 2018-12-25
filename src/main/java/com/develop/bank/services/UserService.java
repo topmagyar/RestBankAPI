@@ -9,6 +9,6 @@ import java.util.List;
  */
 
 public interface UserService {
-    long save(User user);
+    User save(User user);
     List<User> getUsers(String token);
 }
