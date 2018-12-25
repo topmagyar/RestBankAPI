@@ -3,6 +3,7 @@ package com.develop.bank.services.impl;
 import com.develop.bank.DAO.*;
 import com.develop.bank.model.Card;
 import com.develop.bank.model.ConnectionInfo;
+import com.develop.bank.model.order.DecreaseOrder;
 import com.develop.bank.model.order.IncreaseOrder;
 import com.develop.bank.model.order.TransferOrder;
 import com.develop.bank.model.User;
@@ -83,6 +84,24 @@ public class OrderServiceImpl implements OrderService {
                 Card card = cardDAO.getCard("cardNumber", increaseOrder.getCardNumber());
                 if (card.getUserId().equals(user.getId())) {
                     card.setAmount(card.getAmount() + increaseOrder.getAmount());
+                    cardDAO.updateCard(card);
+                    return card;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Card decreaseOrder(String username, String token, DecreaseOrder increaseOrder) {
+        ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(username);
+        if (connectionInfo != null) {
+            token = new CryptTool().decryptMessageByKey(token, connectionInfo.getInfo());
+            User user = getUserByToken(token);
+            if (checkTokenValid(token)) {
+                Card card = cardDAO.getCard("cardNumber", increaseOrder.getCardNumber());
+                if (card.getUserId().equals(user.getId())) {
+                    card.setAmount(card.getAmount() - increaseOrder.getAmount());
                     cardDAO.updateCard(card);
                     return card;
                 }

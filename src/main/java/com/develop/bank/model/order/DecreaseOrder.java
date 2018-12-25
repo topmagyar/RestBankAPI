@@ -8,13 +8,13 @@ public class DecreaseOrder {
 
     private Long id;
     private String cardNumber;
-    private String amount;
+    private Long amount;
 
-    public void setAmount(String amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
-    public String getAmount() {
+    public Long getAmount() {
         return amount;
     }
 

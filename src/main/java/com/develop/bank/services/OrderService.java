@@ -1,6 +1,7 @@
 package com.develop.bank.services;
 
 import com.develop.bank.model.Card;
+import com.develop.bank.model.order.DecreaseOrder;
 import com.develop.bank.model.order.IncreaseOrder;
 import com.develop.bank.model.order.TransferOrder;
 
@@ -17,4 +18,5 @@ public interface OrderService {
     List<TransferOrder> getOrders(String token);
     TransferOrder getOrder(String token, String orderId);
     Card increaseOrder(String username, String token, IncreaseOrder increaseOrder);
+    Card decreaseOrder(String username, String token, DecreaseOrder increaseOrder);
 }

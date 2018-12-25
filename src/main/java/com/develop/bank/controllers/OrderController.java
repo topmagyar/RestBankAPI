@@ -1,6 +1,7 @@
 package com.develop.bank.controllers;
 
 import com.develop.bank.model.Card;
+import com.develop.bank.model.order.DecreaseOrder;
 import com.develop.bank.model.order.IncreaseOrder;
 import com.develop.bank.model.order.TransferOrder;
 import com.develop.bank.services.OrderService;
@@ -43,6 +44,13 @@ public class OrderController {
     public Card increaseCard(@RequestHeader("username") String username, @RequestHeader("token") String token,
                              @RequestBody IncreaseOrder increaseOrder) {
         return orderService.increaseOrder(username, token, increaseOrder);
+    }
+
+    @PostMapping("/transfers/decrease")
+    @ResponseBody
+    public Card decreaseCard(@RequestHeader("username") String username, @RequestHeader("token") String token,
+                             @RequestBody DecreaseOrder decreaseOrder) {
+        return orderService.decreaseOrder(username, token, decreaseOrder);
     }
 
 }
