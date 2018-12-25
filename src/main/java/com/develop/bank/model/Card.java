@@ -17,8 +17,8 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String userId;
-    private String amount;
+    private Long userId;
+    private Long amount;
     private String amountType;
     @NaturalId
     private String cardNumber;
@@ -28,7 +28,7 @@ public class Card {
         this.id = id;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
@@ -44,11 +44,11 @@ public class Card {
         this.cardKey = cardKey;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public String getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
@@ -68,7 +68,7 @@ public class Card {
         return id;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 }

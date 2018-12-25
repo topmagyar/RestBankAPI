@@ -22,27 +22,29 @@ public class CardController {
     @ResponseBody
     public Card addCard(@RequestHeader("token") String token, @RequestHeader("username") String username,
                         @RequestBody CardAmountType amountType) {
-        Card card = cardService.addCard(token, username, amountType.getAmountType());
+        Card card = cardService.addCard(username, token, amountType.getAmountType());
         return card;
     }
 
-    @GetMapping("/cards/{cardNumber}")
+    @GetMapping("/cards/get/{cardNumber}")
     @ResponseBody
-    public Card getCard(@RequestHeader("token") String token, @PathVariable("cardNumber") String cardNumber) {
-        Card card = cardService.getCard(token, cardNumber);
+    public Card getCard(@RequestHeader("username") String username, @RequestHeader("token") String token,
+                        @PathVariable("cardNumber") String cardNumber) {
+        Card card = cardService.getCard(username, token, cardNumber);
         return card;
     }
 
     @GetMapping("/cards/get")
     @ResponseBody
-    public List<Card> getCards(@RequestHeader("token") String token) {
-        List<Card> cards = cardService.getCards(token);
+    public List<Card> getCards(@RequestHeader("username") String username, @RequestHeader("token") String token) {
+        List<Card> cards = cardService.getCards(username, token);
         return cards;
     }
 
     @DeleteMapping("/cards/{cardNumber}")
-    public String removeCard(@RequestHeader("token") String token, @PathVariable("cardNumber") String cardNumber) {
-        String status = cardService.removeCard(token, cardNumber);
+    public String removeCard(@RequestHeader("username") String username, @RequestHeader("token") String token,
+                             @PathVariable("cardNumber") String cardNumber) {
+        String status = cardService.removeCard(username, token, cardNumber);
         return status;
     }
 }

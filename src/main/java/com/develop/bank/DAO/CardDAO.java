@@ -13,6 +13,6 @@ public interface CardDAO {
     Card saveCard(Card card);
     String removeCard(String cardNumber);
     String updateCard(Card card);
-    Card getCard(String cardNumber);
+    Card getCard(String field, String value);
     List<Card> getCards();
 }

@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface CardService {
 
-    Card addCard(String token, String username, String amountType);
-    List<Card> getCards(String token);
-    Card getCard(String token, String number);
-    String removeCard(String token, String number);
+    Card addCard(String username, String token, String amountType);
+    List<Card> getCards(String username, String token);
+    Card getCard(String username, String token, String number);
+    String removeCard(String username, String token, String number);
 }

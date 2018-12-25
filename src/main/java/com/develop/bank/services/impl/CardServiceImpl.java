@@ -39,16 +39,16 @@ public class CardServiceImpl implements CardService {
     private ConnectionDAO connectionDAO;
 
     @Override
-    public Card addCard(String token, String username, String amountType) {
+    public Card addCard(String username, String token, String amountType) {
         ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(username);
         if (connectionInfo != null) {
             token = new CryptTool().decryptMessageByKey(token, connectionInfo.getInfo());
             User user = getUserByToken(token);
             if (checkTokenValid(token) && user != null) {
                 Card card = new Card();
-                card.setAmount(String.valueOf(0));
+                card.setAmount((long) 0);
                 card.setAmountType(amountType);
-                card.setUserId(String.valueOf(user.getId()));
+                card.setUserId(user.getId());
                 card.setCardNumber(generateRandomCardNumber());
                 String cardKey = "";
                 for (int i = 0; i < 3; i++) {
@@ -66,26 +66,42 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public List<Card> getCards(String token) {
-        if (checkTokenValid(token)) {
-            return cardDAO.getCards();
+    public List<Card> getCards(String username, String token) {
+        ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(username);
+        if (connectionInfo != null) {
+            token = new CryptTool().decryptMessageByKey(token, connectionInfo.getInfo());
+            if (checkTokenValid(token)) {
+                return cardDAO.getCards();
+            }
         }
         return null;
     }
 
     @Override
-    public Card getCard(String token, String number) {
-        if (checkTokenValid(token)) {
-            return cardDAO.getCard(number);
+    public Card getCard(String username, String token, String number) {
+        ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(username);
+        if (connectionInfo != null) {
+            token = new CryptTool().decryptMessageByKey(token, connectionInfo.getInfo());
+            if (checkTokenValid(token)) {
+                Card card = cardDAO.getCard("id", number);
+                if (card == null) {
+                    card = cardDAO.getCard("cardNumber", number);
+                }
+                return card;
+            }
         }
         return null;
     }
 
     @Override
-    public String removeCard(String token, String number) {
-        if (checkTokenValid(token)) {
-            cardDAO.removeCard(number);
-            return "Success";
+    public String removeCard(String username, String token, String number) {
+        ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(username);
+        if (connectionInfo != null) {
+            token = new CryptTool().decryptMessageByKey(token, connectionInfo.getInfo());
+            if (checkTokenValid(token)) {
+                cardDAO.removeCard(number);
+                return "Success";
+            }
         }
         return "Error";
     }
@@ -110,7 +126,7 @@ public class CardServiceImpl implements CardService {
         for (int i = 0; i < 16; i++) {
             newCardNumber.append(String.valueOf(new Random().nextInt(10)));
         }
-        Card card = cardDAO.getCard(newCardNumber.toString());
+        Card card = cardDAO.getCard("cardNumber", newCardNumber.toString());
         if (card == null) {
             return newCardNumber.toString();
         } else {

@@ -1,7 +1,7 @@
 package com.develop.bank.DAO.impl;
 
 import com.develop.bank.DAO.OrderDAO;
-import com.develop.bank.model.Order;
+import com.develop.bank.model.order.TransferOrder;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -23,34 +23,34 @@ public class OrderDAOImpl implements OrderDAO {
     private SessionFactory sessionFactory;
 
     @Override
-    public Order addOrder(Order order) {
+    public TransferOrder addOrder(TransferOrder order) {
         sessionFactory.getCurrentSession().save(order);
         return order;
     }
 
     @Override
-    public List<Order> getOrders() {
+    public List<TransferOrder> getOrders() {
         CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
-        CriteriaQuery<Order> criteria = builder.createQuery(Order.class);
-        criteria.from(Order.class);
-        List<Order> data = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+        CriteriaQuery<TransferOrder> criteria = builder.createQuery(TransferOrder.class);
+        criteria.from(TransferOrder.class);
+        List<TransferOrder> data = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
         return data;
     }
 
     @Override
-    public String removeOrder(Order order) {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Order.class)
+    public String removeOrder(TransferOrder order) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(TransferOrder.class)
                 .add(Restrictions.eq("cardFrom", order.getCardFrom()));
-        Order result = (Order) criteria.uniqueResult();
+        TransferOrder result = (TransferOrder) criteria.uniqueResult();
         sessionFactory.getCurrentSession().delete(result);
         return "Success";
     }
 
     @Override
-    public Order getOrder(String field, String value) {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Order.class)
+    public TransferOrder getOrder(String field, String value) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(TransferOrder.class)
                 .add(Restrictions.eq(field, value));
         Object result = criteria.uniqueResult();
-        return (Order) result;
+        return (TransferOrder) result;
     }
 }

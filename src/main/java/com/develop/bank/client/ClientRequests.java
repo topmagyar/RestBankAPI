@@ -5,6 +5,7 @@ import com.develop.bank.model.User;
 import com.develop.bank.model.card.CardAmountType;
 import com.develop.bank.model.connection.ConnectionModel;
 import com.develop.bank.model.connection.ConnectionResponse;
+import com.develop.bank.model.order.IncreaseOrder;
 import com.develop.bank.util.CryptTool;
 import com.develop.bank.util.KeyConnection;
 import com.develop.bank.util.KeyGenerator;
@@ -14,12 +15,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestOperations;
 
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * @author Yehor Bobyk <ybobuk@tibco.com>
@@ -106,7 +109,7 @@ public class ClientRequests {
     public void addCard() {
         String username = "topmagyar";
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiWWVob3IiLCJ1c2VybmFtZSI6InRvcG1hZ3lhciIsImFkbWluIjpmYWxzZX0.dZZqeQY0CxgVEeJdyuKvtUkFWJy5lJgzIs7d5kUVN7M";
-        CardAmountType cardAmountType = new CardAmountType("USD");
+        CardAmountType cardAmountType = new CardAmountType("UAH");
         HttpHeaders headers = new HttpHeaders();
         headers.add("token", new CryptTool().encryptMessageByKey(token, "322728646353086"));
         headers.add("username", username);
@@ -114,6 +117,48 @@ public class ClientRequests {
         ResponseEntity<Card> response = rest.postForEntity("https://localhost:8443/bank-api/cards/add", request, Card.class);
         Card c = response.getBody();
         System.out.println("Card number " + c.getCardNumber());
+    }
+
+    @Test
+    public void getCards() {
+        String username = "topmagyar";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiWWVob3IiLCJ1c2VybmFtZSI6InRvcG1hZ3lhciIsImFkbWluIjpmYWxzZX0.dZZqeQY0CxgVEeJdyuKvtUkFWJy5lJgzIs7d5kUVN7M";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("token", new CryptTool().encryptMessageByKey(token, "322728646353086"));
+        headers.add("username", username);
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = rest.exchange("https://localhost:8443/bank-api/cards/get", HttpMethod.GET, request, String.class);
+        System.out.println("response " + response.getBody());
+    }
+
+    @Test
+    public void getCardByID() {
+        String username = "topmagyar";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiWWVob3IiLCJ1c2VybmFtZSI6InRvcG1hZ3lhciIsImFkbWluIjpmYWxzZX0.dZZqeQY0CxgVEeJdyuKvtUkFWJy5lJgzIs7d5kUVN7M";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("token", new CryptTool().encryptMessageByKey(token, "322728646353086"));
+        headers.add("username", username);
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = rest.exchange("https://localhost:8443/bank-api/cards/get/6", HttpMethod.GET, request, String.class);
+        System.out.println("response " + response.getBody());
+    }
+
+    @Test
+    public void increaseCardAmount() {
+        IncreaseOrder increaseOrder = new IncreaseOrder();
+        increaseOrder.setAmount((long) 228);
+        increaseOrder.setCardNumber("7738879483671899");
+        String username = "topmagyar";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiWWVob3IiLCJ1c2VybmFtZSI6InRvcG1hZ3lhciIsImFkbWluIjpmYWxzZX0.dZZqeQY0CxgVEeJdyuKvtUkFWJy5lJgzIs7d5kUVN7M";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("token", new CryptTool().encryptMessageByKey(token, "322728646353086"));
+        headers.add("username", username);
+        HttpEntity<IncreaseOrder> request = new HttpEntity<>(increaseOrder, headers);
+
+        ResponseEntity<Card> response = rest.postForEntity("https://localhost:8443/bank-api/transfers/increase", request, Card.class);
+        System.out.println("Response: " + response.getBody());
     }
 
 //    @Test

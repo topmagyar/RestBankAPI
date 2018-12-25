@@ -1,6 +1,8 @@
 package com.develop.bank.services;
 
-import com.develop.bank.model.Order;
+import com.develop.bank.model.Card;
+import com.develop.bank.model.order.IncreaseOrder;
+import com.develop.bank.model.order.TransferOrder;
 
 import java.util.List;
 
@@ -10,8 +12,9 @@ import java.util.List;
 
 public interface OrderService {
 
-    Order createOrder(String token, Order order);
+    TransferOrder createOrder(String token, TransferOrder order);
     String removeOrder(String token, String orderId);
-    List<Order> getOrders(String token);
-    Order getOrder(String token, String orderId);
+    List<TransferOrder> getOrders(String token);
+    TransferOrder getOrder(String token, String orderId);
+    Card increaseOrder(String username, String token, IncreaseOrder increaseOrder);
 }

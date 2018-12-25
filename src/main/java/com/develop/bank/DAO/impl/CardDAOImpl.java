@@ -44,9 +44,15 @@ public class CardDAOImpl implements CardDAO {
     }
 
     @Override
-    public Card getCard(String cardNumber) {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Card.class)
-                .add(Restrictions.eq("cardNumber", cardNumber));
+    public Card getCard(String field, String value) {
+        Criteria criteria;
+        if (field.equals("id")) {
+            criteria = sessionFactory.getCurrentSession().createCriteria(Card.class)
+                    .add(Restrictions.eq(field, Long.valueOf(value)));
+        } else {
+            criteria = sessionFactory.getCurrentSession().createCriteria(Card.class)
+                    .add(Restrictions.eq(field, value));
+        }
         Object result = criteria.uniqueResult();
         return (Card) result;
     }

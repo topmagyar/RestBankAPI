@@ -1,6 +1,8 @@
 package com.develop.bank.controllers;
 
-import com.develop.bank.model.Order;
+import com.develop.bank.model.Card;
+import com.develop.bank.model.order.IncreaseOrder;
+import com.develop.bank.model.order.TransferOrder;
 import com.develop.bank.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,25 +19,30 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping("/orders/add")
+    @PostMapping("/transfers/add")
     @ResponseBody
-    public Order addOrder(@RequestHeader("token") String token, @RequestBody Order order) {
-        Order o = orderService.createOrder(token, order);
+    public TransferOrder addOrder(@RequestHeader("token") String token, @RequestBody TransferOrder order) {
+        TransferOrder o = orderService.createOrder(token, order);
         return o;
     }
 
-    @GetMapping("/orders/get")
+    @GetMapping("/transfers/get")
     @ResponseBody
-    public List<Order> getOrders(@RequestHeader("token") String token) {
+    public List<TransferOrder> getOrders(@RequestHeader("token") String token) {
         return orderService.getOrders(token);
     }
 
-    @GetMapping("orders/get/{id}")
+    @GetMapping("/transfers/get/{id}")
     @ResponseBody
-    public Order getOrder(@RequestHeader("token") String token, @PathVariable("id") String id) {
+    public TransferOrder getOrder(@RequestHeader("token") String token, @PathVariable("id") String id) {
         return orderService.getOrder(token, id);
     }
 
-
+    @PostMapping("/transfers/increase")
+    @ResponseBody
+    public Card increaseCard(@RequestHeader("username") String username, @RequestHeader("token") String token,
+                             @RequestBody IncreaseOrder increaseOrder) {
+        return orderService.increaseOrder(username, token, increaseOrder);
+    }
 
 }

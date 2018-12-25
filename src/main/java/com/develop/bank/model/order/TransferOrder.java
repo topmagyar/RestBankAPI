@@ -1,4 +1,4 @@
-package com.develop.bank.model;
+package com.develop.bank.model.order;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -11,16 +11,15 @@ import javax.persistence.Id;
  * @author Yehor Bobyk <ybobuk@tibco.com>
  */
 
-@Entity(name = "order")
-public class Order {
+@Entity(name = "orders")
+public class TransferOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String cardFrom;
     private String cardTo;
-    private String orderType;
-    private String amount;
+    private Long amount;
 
     public void setId(Long id) {
         this.id = id;
@@ -46,19 +45,11 @@ public class Order {
         return cardTo;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
-    public void setOrderType(String orderType) {
-        this.orderType = orderType;
-    }
-
-    public String getAmount() {
+    public Long getAmount() {
         return amount;
-    }
-
-    public String getOrderType() {
-        return orderType;
     }
 }

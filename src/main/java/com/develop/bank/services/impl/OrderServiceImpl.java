@@ -1,12 +1,14 @@
 package com.develop.bank.services.impl;
 
-import com.develop.bank.DAO.OrderDAO;
-import com.develop.bank.DAO.TokenDAO;
-import com.develop.bank.DAO.UserDAO;
-import com.develop.bank.model.Order;
+import com.develop.bank.DAO.*;
+import com.develop.bank.model.Card;
+import com.develop.bank.model.ConnectionInfo;
+import com.develop.bank.model.order.IncreaseOrder;
+import com.develop.bank.model.order.TransferOrder;
 import com.develop.bank.model.User;
 import com.develop.bank.model.ValidToken;
 import com.develop.bank.services.OrderService;
+import com.develop.bank.util.CryptTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,8 +32,14 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private UserDAO userDAO;
 
+    @Autowired
+    private ConnectionDAO connectionDAO;
+
+    @Autowired
+    private CardDAO cardDAO;
+
     @Override
-    public Order createOrder(String token, Order order) {
+    public TransferOrder createOrder(String token, TransferOrder order) {
         User user = getUserByToken(token);
         if (checkTokenValid(token) && user != null) {
             orderDAO.addOrder(order);
@@ -42,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String removeOrder(String token, String orderId) {
         if (checkTokenValid(token)) {
-            Order order = orderDAO.getOrder("id",orderId);
+            TransferOrder order = orderDAO.getOrder("id",orderId);
             orderDAO.removeOrder(order);
             return "Success";
         }
@@ -50,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrders(String token) {
+    public List<TransferOrder> getOrders(String token) {
         if (checkTokenValid(token)) {
             return orderDAO.getOrders();
         }
@@ -58,9 +66,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrder(String token, String orderId) {
+    public TransferOrder getOrder(String token, String orderId) {
         if (checkTokenValid(token)) {
             return orderDAO.getOrder("id", orderId);
+        }
+        return null;
+    }
+
+    @Override
+    public Card increaseOrder(String username, String token, IncreaseOrder increaseOrder) {
+        ConnectionInfo connectionInfo = connectionDAO.getConnectionInfo(username);
+        if (connectionInfo != null) {
+            token = new CryptTool().decryptMessageByKey(token, connectionInfo.getInfo());
+            User user = getUserByToken(token);
+            if (checkTokenValid(token)) {
+                Card card = cardDAO.getCard("cardNumber", increaseOrder.getCardNumber());
+                if (card.getUserId().equals(user.getId())) {
+                    card.setAmount(card.getAmount() + increaseOrder.getAmount());
+                    cardDAO.updateCard(card);
+                    return card;
+                }
+            }
         }
         return null;
     }
